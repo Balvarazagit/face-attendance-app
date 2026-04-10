@@ -1,0 +1,68 @@
+/* RegisterPage Styles */
+.register-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.register-container {
+  background: rgba(26, 31, 58, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 32px;
+  overflow: hidden;
+  max-width: 600px;
+  width: 100%;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s;
+}
+
+.register-container:hover {
+  transform: translateY(-5px);
+}
+
+.register-header {
+  background: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  animation: rotate 10s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.register-header h2 {
+  color: white;
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+
+.register-header p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  position: relative;
+  z-index: 1;
+}
+
+.register-content {
+  padding: 2rem;
+}

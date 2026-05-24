@@ -15,7 +15,7 @@ const HomePage = () => {
   const [loadingAttendance, setLoadingAttendance] = useState(false);
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date().toLocaleDateString("en-CA");
     setSelectedDate(today);
     fetchData(today);
   }, []);
@@ -60,7 +60,7 @@ const HomePage = () => {
 
   const checkAttendance = (name) => {
     return attendance.some((a) => {
-      const dbDate = new Date(a.date).toISOString().split("T")[0];
+      const dbDate = new Date(a.date).toLocaleDateString("en-CA");
       return a.name === name && dbDate === selectedDate;
     });
   };
@@ -177,7 +177,11 @@ const HomePage = () => {
               ) : (
                 users.map((user, index) => {
                   const isPresent = checkAttendance(user.name);
-                  const attendanceRecord = attendance.find(a => a.name === user.name);
+                  const attendanceRecord = attendance.find((a) => {
+                    const dbDate = new Date(a.date).toLocaleDateString("en-CA");
+
+                    return a.name === user.name && dbDate === selectedDate;
+                  });
                   const attendanceTime = attendanceRecord ? new Date(attendanceRecord.updatedAt).toLocaleTimeString() : null;
 
                   return (

@@ -27,6 +27,7 @@ export const markAttendance = async (req, res) => {
 
     if (alreadyMarked) {
       return res.status(400).json({
+        alreadyMarked: true,
         message: "Attendance already marked today ⚠️",
       });
     }
@@ -35,7 +36,6 @@ export const markAttendance = async (req, res) => {
       name,
       date: today, // ✅ ONLY DATE (no time)
     });
-
     await attendance.save();
 
     res.json({ message: "Attendance marked ✅" });
@@ -55,8 +55,11 @@ export const getAttendance = async (req, res) => {
       return res.json(data);
     }
 
-    const start = new Date(date + "T00:00:00");
-    const end = new Date(date + "T23:59:59");
+    const start = new Date(date);
+    start.setHours(0, 0, 0, 0);
+
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999);
 
     const data = await Attendance.find({
       date: {

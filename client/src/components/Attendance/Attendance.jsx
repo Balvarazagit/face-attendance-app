@@ -35,7 +35,6 @@ const Attendance = () => {
       await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
       await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
       await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-      console.log("Models Loaded");
       setModelsLoaded(true);
     } catch (error) {
       console.error("Error loading models:", error);
@@ -179,8 +178,12 @@ const Attendance = () => {
             const res = await API.post("/attendance", {
               name: result.label,
             });
-            messages.push(`✅ ${result.label}: ${res.data.message}`);
-            successCount++;
+            if (res.data.alreadyMarked) {
+              messages.push(`⚠️ ${result.label}: ${res.data.message}`);
+            } else {
+              messages.push(`✅ ${result.label}: ${res.data.message}`);
+              successCount++;
+            }
           } catch (error) {
             const msg = error.response?.data?.message || "Error ❌";
             messages.push(`⚠️ ${result.label}: ${msg}`);

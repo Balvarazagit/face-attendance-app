@@ -18,6 +18,22 @@ function InstallButton() {
       window.removeEventListener("beforeinstallprompt", handler);
   }, []);
 
+  useEffect(() => {
+    const handler = (e) => {
+      console.log("beforeinstallprompt fired");
+      alert("Install event received");
+
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowPopup(true);
+    };
+
+    window.addEventListener("beforeinstallprompt", handler);
+
+    return () =>
+      window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
   const handleInstall = async () => {
     if (!deferredPrompt) return;
 

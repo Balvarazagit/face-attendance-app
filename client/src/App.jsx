@@ -5,10 +5,11 @@ import AttendancePage from "./pages/AttendancePage/AttendancePage";
 import HomePage from "./pages/HomePage/HomePage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import InstallButton from "./components/InstallButton/InstallButton";
 function App() {
   return (
     <Router>
+      <InstallButton />
       <div className="app-container">
         <header className="app-header">
           <div className="header-content">

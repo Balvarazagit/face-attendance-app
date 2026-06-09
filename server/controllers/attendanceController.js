@@ -94,3 +94,43 @@ export const deleteAttendance = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+//manual attendance
+export const manualAttendance = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const alreadyMarked = await Attendance.findOne({
+      name,
+      date: {
+        $gte: today,
+        $lt: tomorrow,
+      },
+    });
+
+    if (alreadyMarked) {
+      return res.status(400).json({
+        message: "Attendance already marked today",
+      });
+    }
+
+    await Attendance.create({
+      name,
+      date: today,
+    });
+
+    res.json({
+      message: `${name} attendance marked successfully`,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};

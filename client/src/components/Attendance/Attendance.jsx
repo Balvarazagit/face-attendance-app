@@ -12,6 +12,7 @@ const Attendance = () => {
   const [loading, setLoading] = useState(false);
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [recognizedFaces, setRecognizedFaces] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
 
   useEffect(() => {
     loadModels();
@@ -209,6 +210,26 @@ const Attendance = () => {
     }
   };
 
+  const markManualAttendance = async () => {
+    if (!selectedUser) {
+      toast.error("Please select user");
+      return;
+    }
+
+    try {
+      const res = await API.post("/attendance/manual", {
+        name: selectedUser,
+      });
+
+      toast.success(res.data.message);
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+        "Failed to mark attendance"
+      );
+    }
+  };
+
   return (
     <div className="attendance-component">
       {loading && (
@@ -278,6 +299,27 @@ const Attendance = () => {
         )}
       </button>
       
+      <div className="manual-attendance">
+        <h3>✍️ Manual Attendance</h3>
+
+        <select
+          value={selectedUser}
+          onChange={(e) => setSelectedUser(e.target.value)}
+        >
+          <option value="">Select User</option>
+
+          {users.map((user) => (
+            <option key={user._id} value={user.name}>
+              {user.name}
+            </option>
+          ))}
+        </select>
+
+        <button onClick={markManualAttendance}>
+          Mark Manual Attendance
+        </button>
+      </div>
+
       {!modelsLoaded && !loading && (
         <div className="info-text">
           ⚡ Initializing face recognition system...

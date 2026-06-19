@@ -5,7 +5,7 @@ import API from "../../services/api";
 import "./Attendance.css";
 import { toast } from "react-toastify";
 
-const Attendance = () => {
+const Attendance = ({ attendanceDate }) => {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const [users, setUsers] = useState([]);
@@ -176,8 +176,19 @@ const Attendance = () => {
 
         if (result.label !== "unknown") {
           try {
+            const matchedUser = users.find(
+              (u) => u.name.trim().toLowerCase() === result.label.trim().toLowerCase()
+            );
+
+            if (!matchedUser) {
+              messages.push(`❌ User not found: ${result.label}`);
+              continue;
+            }
+
             const res = await API.post("/attendance", {
-              name: result.label,
+              userId: matchedUser._id,
+              name: matchedUser.name,
+              date: attendanceDate,
             });
             if (res.data.alreadyMarked) {
               messages.push(`⚠️ ${result.label}: ${res.data.message}`);
@@ -217,8 +228,14 @@ const Attendance = () => {
     }
 
     try {
+      const selectedUserData = users.find(
+        (u) => u.name === selectedUser
+      );
+
       const res = await API.post("/attendance/manual", {
-        name: selectedUser,
+        userId: selectedUserData._id,
+        name: selectedUserData.name,
+        date: attendanceDate,
       });
 
       toast.success(res.data.message);

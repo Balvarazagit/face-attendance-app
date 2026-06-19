@@ -20,7 +20,6 @@ function InstallButton() {
 
   useEffect(() => {
     const handler = (e) => {
-      console.log("beforeinstallprompt fired");
       alert("Install event received");
 
       e.preventDefault();

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, NavLink, useLocation } from "react-router-dom";
 import "./App.css"; 
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import AttendancePage from "./pages/AttendancePage/AttendancePage";
@@ -6,62 +6,69 @@ import HomePage from "./pages/HomePage/HomePage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import InstallButton from "./components/InstallButton/InstallButton";
-function App() {
+
+// Admin Imports
+import AdminLogin from "./pages/Admin/AdminLogin/AdminLogin.jsx";
+import AdminDashboard from "./pages/Admin/AdminDashboard/AdminDashboard.jsx";
+import UsersManagement from "./pages/Admin/UsersManagement/UsersManagement.jsx";
+import AttendanceManagement from "./pages/Admin/AttendanceManagement/AttendanceManagement.jsx";
+import AdminProtectedRoute from "./components/Admin/AdminProtectedRoute";
+import logo from "./assests/logo.png";
+// Component to conditionally show header and footer
+const Layout = ({ children }) => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  
   return (
-    <Router>
-      <InstallButton />
-      <div className="app-container">
+    <div className="app-container">
+      {!isAdminRoute && (
         <header className="app-header">
           <div className="header-content">
             <div className="logo-section">
-              <div className="logo-icon">👤</div>
-              <h1 className="app-title">FaceAttend<span>Pro</span></h1>
+              <img
+                src={logo}
+                alt="FaceAttendPro Logo"
+                className="logo-image"
+              />
+
+              <h1 className="app-title">
+                FaceAttend<span>Pro</span>
+              </h1>
             </div>
             
             <nav className="navigation">
               <NavLink 
-                to="/" 
+                to="/admin/login" 
                 className={({ isActive }) => 
                   isActive ? "nav-link active" : "nav-link"
                 }
                 end
               >
                 <span className="nav-icon">🏠</span>
-                <span>Dashboard</span>
-              </NavLink>
-              <NavLink 
-                to="/register" 
-                className={({ isActive }) => 
-                  isActive ? "nav-link active" : "nav-link"
-                }
-              >
-                <span className="nav-icon">📝</span>
-                <span>Register</span>
-              </NavLink>
-              <NavLink 
-                to="/attendance" 
-                className={({ isActive }) => 
-                  isActive ? "nav-link active" : "nav-link"
-                }
-              >
-                <span className="nav-icon">✅</span>
-                <span>Mark Attendance</span>
+                <span>Admin</span>
               </NavLink>
             </nav>
           </div>
         </header>
-
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/attendance" element={<AttendancePage />} />
-          </Routes>
-        </main>
-
+      )}
+      
+      <main className={!isAdminRoute ? "main-content" : "admin-main-content"}>
+        {children}
+      </main>
+      
+      {!isAdminRoute && (
         <footer className="app-footer">
           <div className="footer-content">
-            <p>© 2024 FaceAttendPro | Secure Face Recognition System</p>
+            <p>© 2026 FaceAttendPro | Secure Face Recognition System |&nbsp;
+              <a
+                href="https://portfolio-mxf7.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{textDecoration:"none", color:"white"}}
+              >
+                Balva.dev
+              </a>
+            </p>
             <div className="footer-links">
               <span>🔒 Secure</span>
               <span>⚡ Fast</span>
@@ -69,8 +76,42 @@ function App() {
             </div>
           </div>
         </footer>
-      </div>
-       <ToastContainer position="top-right" autoClose={3000} />
+      )}
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <InstallButton />
+      <Layout>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/attendance" element={<AttendancePage />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={
+            <AdminProtectedRoute>
+              <AdminDashboard />
+            </AdminProtectedRoute>
+          } />
+          <Route path="/admin/users" element={
+            <AdminProtectedRoute>
+              <UsersManagement />
+            </AdminProtectedRoute>
+          } />
+          <Route path="/admin/attendance" element={
+            <AdminProtectedRoute>
+              <AttendanceManagement />
+            </AdminProtectedRoute>
+          } />
+        </Routes>
+      </Layout>
+      <ToastContainer position="top-right" autoClose={3000} />
     </Router>
   );
 }

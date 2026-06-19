@@ -3,15 +3,19 @@ import User from "../models/User.js";
 // Register User
 export const registerUser = async (req, res) => {
   try {
-    console.log("BODY:", req.body);
-    console.log("TYPE:", typeof req.body);
+
     const { name, descriptor,avatar  } = req.body;
     const existingUser = await User.findOne({ name });
 
     if (existingUser) {
       return res.status(400).json({ message: "User already registered ❌" });
     }
-    if (!name || !descriptor) {
+    if (
+      !name ||
+      !descriptor ||
+      !Array.isArray(descriptor) ||
+      descriptor.length !== 128
+    ) {
       return res.status(400).json({ message: "Missing data" });
     }
 
@@ -32,5 +36,35 @@ export const getUsers = async (req, res) => {
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.params.id);
+
+    res.json({
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  try {
+    const updated = await User.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,
+    });
   }
 };

@@ -3,44 +3,42 @@ import Attendance from "../models/Attendance.js";
 // Mark Attendance
 export const markAttendance = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { userId, name, date } = req.body;
 
-    const now = new Date();
+    const attendanceDate = date
+      ? new Date(date)
+      : new Date();
 
-    const today = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate()
-    );
+    attendanceDate.setHours(0, 0, 0, 0);
 
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    const nextDay = new Date(attendanceDate);
+    nextDay.setDate(nextDay.getDate() + 1);
 
-    // ✅ Same day duplicate avoid
     const alreadyMarked = await Attendance.findOne({
-      name,
+      userId,
       date: {
-        $gte: today,
-        $lt: tomorrow,
+        $gte: attendanceDate,
+        $lt: nextDay,
       },
     });
 
     if (alreadyMarked) {
       return res.status(400).json({
         alreadyMarked: true,
-        message: "Attendance already marked today ⚠️",
+        message: "Attendance already marked for this date ⚠️",
       });
     }
 
-    const attendance = new Attendance({
+    await Attendance.create({
+      userId,
       name,
-      date: today, // ✅ ONLY DATE (no time)
+      date: attendanceDate,
     });
-    await attendance.save();
 
-    res.json({ message: "Attendance marked ✅" });
+    res.json({
+      message: "Attendance marked successfully ✅",
+    });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -51,7 +49,7 @@ export const getAttendance = async (req, res) => {
     const { date } = req.query;
 
     if (!date) {
-      const data = await Attendance.find();
+      const data = await Attendance.find().populate("userId");
       return res.json(data);
     }
 
@@ -98,31 +96,35 @@ export const deleteAttendance = async (req, res) => {
 //manual attendance
 export const manualAttendance = async (req, res) => {
   try {
-    const { name } = req.body;
+    const { userId, name, date } = req.body;
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    const attendanceDate = date
+      ? new Date(date)
+      : new Date();
 
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    attendanceDate.setHours(0, 0, 0, 0);
+
+    const nextDay = new Date(attendanceDate);
+    nextDay.setDate(nextDay.getDate() + 1);
 
     const alreadyMarked = await Attendance.findOne({
-      name,
+      userId,
       date: {
-        $gte: today,
-        $lt: tomorrow,
+        $gte: attendanceDate,
+        $lt: nextDay,
       },
     });
 
     if (alreadyMarked) {
       return res.status(400).json({
-        message: "Attendance already marked today",
+        message: "Attendance already marked for this date",
       });
     }
 
     await Attendance.create({
+      userId,
       name,
-      date: today,
+      date: attendanceDate,
     });
 
     res.json({

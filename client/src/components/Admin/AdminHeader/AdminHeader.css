@@ -1,0 +1,228 @@
+/* src/components/Admin/AdminHeader/AdminHeader.css */
+
+.admin-header {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+}
+
+/* ── Left side ── */
+.admin-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.menu-toggle-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: white;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.menu-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* X icon gets a subtle red tint on hover */
+.menu-toggle-btn.close-mode {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.menu-toggle-btn.close-mode:hover {
+  background: rgba(239, 68, 68, 0.28);
+}
+
+.header-welcome h2 {
+  color: white;
+  font-size: 1.1rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Right side ── */
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.admin-profile {
+  position: relative;
+}
+
+.profile-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  padding: 0.4rem 1rem 0.4rem 0.5rem;
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.profile-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.profile-avatar {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+.profile-name {
+  color: white;
+  font-size: 0.9rem;
+}
+
+.dropdown-icon {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  transition: transform 0.3s;
+}
+
+.dropdown-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* ── Dropdown ── */
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 240px;
+  background: #1e293b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  z-index: 2000;
+  overflow: hidden;
+  animation: dropIn 0.18s ease;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-header {
+  padding: 1rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dropdown-avatar {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.dropdown-info h4 {
+  color: white;
+  margin: 0 0 2px;
+  font-size: 0.9rem;
+}
+
+.dropdown-info p {
+  color: #94a3b8;
+  margin: 0;
+  font-size: 0.75rem;
+  word-break: break-all;
+}
+
+.dropdown-menu {
+  padding: 0.4rem;
+}
+
+.dropdown-item {
+  width: 100%;
+  padding: 0.7rem 0.75rem;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #e2e8f0;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.dropdown-item.logout {
+  color: #ef4444;
+}
+
+.dropdown-item:hover {
+  background: rgba(102, 126, 234, 0.15);
+}
+
+.dropdown-item.logout:hover {
+  background: rgba(239, 68, 68, 0.12);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .admin-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .header-welcome h2 {
+    font-size: 0.95rem;
+  }
+
+  .profile-name {
+    display: none; /* hide name on mobile, keep avatar */
+  }
+
+  .profile-btn {
+    padding: 0.4rem 0.6rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .header-welcome {
+    display: none; /* very small screens — just show buttons */
+  }
+}

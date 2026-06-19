@@ -24,7 +24,6 @@ const Register = () => {
       await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL);
       await faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL);
       await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
-      console.log("Models Loaded");
       setModelsLoaded(true);
     } catch (error) {
       console.error("Error loading models:", error);
@@ -64,9 +63,6 @@ const Register = () => {
       }
 
       const descriptor = Array.from(detection.descriptor);
-
-      console.log("Sending Data:", { name, descriptor });
-      console.log("Descriptor Length:", descriptor.length);
 
       // API Call with loader
       const res = await API.post("/users/register", {

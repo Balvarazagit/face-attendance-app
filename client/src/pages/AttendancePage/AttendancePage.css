@@ -1,33 +1,48 @@
-/* AttendancePage Styles */
+/* AttendancePage.css - Modern Page Container */
+
 .attendance-page {
   min-height: calc(100vh - 200px);
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
+  background: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.05), transparent);
 }
 
 .attendance-container {
   background: rgba(26, 31, 58, 0.7);
   backdrop-filter: blur(20px);
-  border-radius: 32px;
+  border-radius: 40px;
   overflow: hidden;
-  max-width: 800px;
+  max-width: 900px;
   width: 100%;
   border: 1px solid rgba(139, 92, 246, 0.3);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .attendance-container:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px -12px rgba(139, 92, 246, 0.3);
 }
 
 .attendance-header {
-  background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+  background: linear-gradient(135deg, #f59e0b, #ef4444, #8b5cf6);
+  background-size: 200% 200%;
   padding: 2rem;
   text-align: center;
   position: relative;
   overflow: hidden;
+  animation: gradientShift 5s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 .attendance-header::before {
@@ -37,32 +52,54 @@
   left: -50%;
   width: 200%;
   height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  animation: pulseGlow 3s ease-in-out infinite;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+  animation: rotate 20s linear infinite;
 }
 
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .attendance-header h2 {
   color: white;
   margin: 0;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.2rem;
+  font-weight: 800;
   position: relative;
   z-index: 1;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  letter-spacing: -0.5px;
 }
 
 .attendance-header p {
-  color: rgba(255, 255, 255, 0.9);
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.95);
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
   position: relative;
   z-index: 1;
+  font-weight: 500;
 }
 
 .attendance-content {
   padding: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .attendance-page {
+    padding: 1rem;
+  }
+  
+  .attendance-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .attendance-content {
+    padding: 1.5rem;
+  }
 }

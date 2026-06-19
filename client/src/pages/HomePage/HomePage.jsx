@@ -155,20 +155,19 @@ const HomePage = () => {
             <p>Loading data...</p>
           </div>
         ) : (
-          <table className="attendance-table">
+          <table className="attendance-table-home">
             <thead>
               <tr>
-                <th><FaUserCircle /> Avatar</th>
-                <th>Name</th>
-                <th><FaCheckCircle /> Status</th>
-                <th><MdAccessTime /> Time</th>
-                <th><FaTrash /> Action</th>
+                <th ><FaUserCircle /> Avatar</th>
+                <th style={{textAlign:"center"}}>Name</th>
+                <th style={{textAlign:"center"}}><FaCheckCircle /> Status</th>
+                <th style={{textAlign:"center"}}><MdAccessTime /> Time</th>
               </tr>
             </thead>
             <tbody>
               {users.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="empty-state">
+                  <td colSpan="4" className="empty-state">
                     <div className="empty-icon"><FaUsers /></div>
                     <p>No users registered yet</p>
                     <small>Please register users first</small>
@@ -221,16 +220,6 @@ const HomePage = () => {
                           </span>
                         ) : (
                           <span className="time-placeholder">—</span>
-                        )}
-                      </td>
-                      <td>
-                        {attendanceRecord && (
-                          <button
-                            className="delete-btn"
-                            onClick={() => handleDelete(attendanceRecord._id)}
-                          >
-                            <MdDelete /> Delete
-                          </button>
                         )}
                       </td>
                     </tr>
